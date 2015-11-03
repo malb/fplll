@@ -38,7 +38,7 @@ public:
                int flags);
 
   bool lll(int kappaMin = 0, int kappaStart = 0, int kappaEnd = -1);
-  bool sizeReduction(int kappaMin = 0, int kappaEnd = -1);
+  inline bool sizeReduction(int kappaMin = 0, int kappaEnd = -1);
 
   int status;
   int finalKappa;
@@ -65,6 +65,16 @@ private:
   ZT ztmp1;
   FT muMant, ftmp1;
 };
+
+template<class ZT, class FT>
+inline bool LLLReduction<ZT, FT>::sizeReduction(int kappaMin, int kappaEnd) {
+  if (kappaEnd == -1) kappaEnd = m.d;
+  for (int k = kappaMin; k < kappaEnd; k++) {
+    if ((k > 0 && !babai(k, k)) || !m.updateGSORow(k))
+      return false;
+  }
+  return setStatus(RED_SUCCESS);
+}
 
 FPLLL_END_NAMESPACE
 
