@@ -193,43 +193,4 @@ bool LLLReduction<ZT, FT>::babai(int kappa, int nCols) {
   return true;
 }
 
-template<class ZT, class FT>
-bool LLLReduction<ZT, FT>::earlyReduction(int start) {
-  m.lockCols();
-  if (verbose) {
-    cerr << "Early reduction start=" << start + 1 << endl;
-  }
-  for (int i = start; i < m.d; i++) {
-    if (!babai(i, start)) return false;
-  }
-  m.unlockCols();
-  lastEarlyRed = start;
-  return true;
-}
-
-template<class ZT, class FT>
-void LLLReduction<ZT, FT>::printParams() {
-  cerr << "Entering LLL"
-       << "\ndelta = " << delta
-       << "\neta = " << eta
-       << "\nprecision = " << FT::getprec()
-       << "\nexact_dot_product = " << static_cast<int>(m.enableIntGram)
-       << "\nrow_expo = " << static_cast<int>(m.enableRowExpo)
-       << "\nearly_red = " << static_cast<int>(enableEarlyRed)
-       << "\nsiegel_cond = " << static_cast<int>(siegel)
-       << "\nlong_in_babai = " << static_cast<int>(m.rowOpForceLong) << endl;
-}
-
-template<class ZT, class FT>
-bool LLLReduction<ZT, FT>::setStatus(int newStatus) {
-  status = newStatus;
-  if (verbose) {
-    if (status == RED_SUCCESS)
-      cerr << "End of LLL: success" << endl;
-    else
-      cerr << "End of LLL: failure: " << RED_STATUS_STR[status] << endl;
-  }
-  return status == RED_SUCCESS;
-}
-
 FPLLL_END_NAMESPACE
