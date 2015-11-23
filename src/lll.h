@@ -115,6 +115,8 @@ inline bool LLLReduction<ZT, FT>::setStatus(int newStatus) {
   return status == RED_SUCCESS;
 }
 
+template<class ZT, class FT>
+bool isLLLReduced(MatGSO<ZT, FT>& m, double delta, double eta);
 
 FPLLL_END_NAMESPACE
 
