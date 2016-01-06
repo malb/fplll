@@ -30,20 +30,16 @@
 <a name="overall_description"></a>
 ## Overall description ##
 
-fplll is distributed under the <a href="COPYING">GNU Lesser General
-Public License</a> (either version 2.1 of the License, or, at your option, any later version)
-as published by the Free Software Foundation.
+fplll is distributed under the [GNU Lesser General Public License](COPYING) (either version 2.1 of
+the License, or, at your option, any later version) as published by the Free Software Foundation.
 
-fplll contains several algorithms on lattices that rely on
-floating-point computations. This includes implementations of the
-floating-point LLL reduction algorithm, offering different
-speed/guarantees ratios. It contains a 'wrapper' choosing the
-estimated best sequence of variants in order to provide a guaranteed
-output as fast as possible. In the case of the wrapper, the
-succession of variants is oblivious to the user. It also includes
-a rigorous floating-point implementation of the Kannan-Fincke-Pohst
-algorithm that finds a shortest non-zero lattice vector, and the
-BKZ reduction algorithm.
+fplll contains several algorithms on lattices that rely on floating-point computations. This
+includes implementations of the floating-point LLL reduction algorithm, offering different
+speed/guarantees ratios. It contains a 'wrapper' choosing the estimated best sequence of variants in
+order to provide a guaranteed output as fast as possible. In the case of the wrapper, the succession
+of variants is oblivious to the user. It also includes a rigorous floating-point implementation of
+the Kannan-Fincke-Pohst algorithm that finds a shortest non-zero lattice vector, and the BKZ
+reduction algorithm.
 
 <a name="dependencies"></a>
 ## Dependencies ##
@@ -52,6 +48,8 @@ BKZ reduction algorithm.
 	* GNU MP 4.2.0 or higher [http://gmplib.org/](http://gmplib.org/)
 	* MPFR 2.3.0 or higher, COMPLETE INSTALLATION [http://www.mpfr.org/](http://www.mpfr.org/)
 	* autotools 2.61 or higher
+* Optional:
+  * QD 2.3.15 or higher (a C++/Fortran-90 double-double and quad-double package), compile and install the shared library (e.g ./configure --enable-shared=yes). [http://crd-legacy.lbl.gov/~dhbailey/mpdist/]
 
 If GMP and/or MPFR include and lib files are not in the default
 directories /usr/include and /usr/lib, you have to set the
@@ -65,12 +63,12 @@ or
 ```./configure CPPFLAGS="-I/mpfrinclude -I/gmpinclude $CPPFLAGD" LDFLAGS="-L/mpfrlib -L/gmplib $LDFLAGS"```
 
 if these variables already exist in your environment.  This should be modified soon for using
-standard `--with-gmp` and `--with-mpfr` package specifications.
+standard `--with-gmp` and `--with-mpfr` package specifications. The same philosophy applies to the (optional) QD library. 
 
 <a name="installation"></a>
 ## Installation ##
 
-If you downloaded the source code from github, you’ll first need to run
+You should downloaded the source code from github and then run
 
     ./autogen.sh
 
@@ -155,6 +153,8 @@ Options for LLL-reduction:
 * -p `precision` : precision of the floating-point arithmetic, works only with -f mpfr.
 
 * -f mpfr : sets the floating-point type to MPFR (default if m=proved).
+* -f dd : sets the floating-point type to double-double.
+* -f qd : sets the floating-point type to quad-double.
 * -f dpe : sets the floating-point type to DPE (default if m=heuristic/heuristicearly).
 * -f double : sets the floating-point type to double (default if m=fast/fastearly).
 * -f longdouble : sets the floating-point type to long double.
@@ -254,6 +254,8 @@ guaranteed that the output basis is (0.98, 0.52)-LLL-reduced.</p>
       <tr><td><td>LM_WRAPPER<td>LM_PROVED<td>LM_HEURISTIC<td>LM_FAST
       <tr><td>FT_DEFAULT<td>yes<td>yes<br>same as FT_MPFR<td>yes<br>same as FT_DPE<td>yes<br>same as FT_DOUBLE
       <tr><td>FT_DOUBLE<td>no<td>yes<td>yes<td>yes
+      <tr><td>FT_DD<td>no<td>yes<td>yes<td>no
+      <tr><td>FT_QD<td>no<td>yes<td>yes<td>no
       <tr><td>FT_DPE<td>no<td>yes<td>yes<td>no
       <tr><td>FT_MPFR<td>no<td>yes<td>yes<td>no
       </table>
@@ -369,7 +371,7 @@ Same as above, but also computes the transform matrix u such that b<sub>new</sub
     <dt><code>delta</code>
       <dd>Used by the LLL subroutine.
     <dt><code>floatType</code>
-      <dd>Internal data type for floating-point computations (FT_DEFAULT, FT_DOUBLE, FT_LONG_DOUBLE, FT_DPE or FT_MPFR). FT_DEFAULT is currently equivalent to FT_DOUBLE.
+      <dd>Internal data type for floating-point computations (FT_DEFAULT, FT_DOUBLE, FT_LONG_DOUBLE, FT_DPE, FT_DD, FT_QD or FT_MPFR). FT_DEFAULT is currently equivalent to FT_DOUBLE.
     <dt><code>precision</code>
       <dd>Internal precision of floating-point computations when floatType = FT_MPFR.
     <dt><code>flags</code>
@@ -519,8 +521,7 @@ typedef ZZ\_mat&lt;mpz_t&gt; IntMatrix;</tt>
 
 FP\_NR stores floating-point numbers. This template provides a uniform
 interface for doing floating-point computations with several underlying
-types (double, dpe_t and mpfr\_t). For all functions, the rounding mode rnd
-is ignored unless F=mpfr\_t.
+types (double, dpe_t, dd, qd and mpfr\_t). For all functions, the rounding mode rnd is ignored unless F=mpfr\_t.
 
 Methods:
 
@@ -747,6 +748,8 @@ Xavier Pujol, xavier.pujol@ens-lyon.org
 ## Acknowledgments ##
 
 Patrick Pelissier and Paul Zimmermann for dpe.
+
+David H. Bailey for QD.
 
 Martin Albrecht, Sylvain Chevillard, Christoph
 Lauter and Gilles Villard for the
