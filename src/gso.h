@@ -161,6 +161,20 @@ public:
    */
   inline void getR(FT& f, int i, int j);
 
+
+  /** 
+   * Copies submatrix Mu and subvector R to targets
+   * 
+   */
+
+inline void GetSubMuR(double* Mu_t, double* R_t,  int beg, int blocksize);
+
+
+
+
+
+
+
   /** 
    * Returns expo such that mu(i, j) &lt; 2^expo for all j &lt; nColumns.
    * It is assumed that mu(i, j) is valid for all j &lt; nColumns.
@@ -457,6 +471,27 @@ inline void MatGSO<ZT, FT>::getR(FT& f, int i, int j) {
   if (enableRowExpo)
     f.mul_2si(f, rowExpo[i] + rowExpo[j]);
 }
+
+
+template<class ZT, class FT>
+inline void MatGSO<ZT, FT>::GetSubMuR(double* Mu_t, double* R_t,  int beg, int blocksize){
+  FT e;
+  for (int i = beg; i < beg+blocksize; ++i){
+    for (int j = beg; j < beg+blocksize; ++j)
+    {
+      getMu(e,i,j);
+      Mu_t[i*blocksize+j] = e.get_d();
+    }
+    getR(e,i,i);
+    R_t[i] = e.get_d();
+  }
+
+
+
+}
+
+
+
 
 template<class ZT, class FT>
 inline bool MatGSO<ZT, FT>::updateGSORow(int i) {
