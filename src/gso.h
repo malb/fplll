@@ -167,8 +167,8 @@ public:
    * 
    */
 
-inline void GetSubMuR(double* Mu_t, double* R_t,  int beg, int blocksize);
-
+inline void DumpMu_d(double* Mu, int beg, int blocksize);
+inline void DumpR_d(double* R, int beg, int blocksize);
 
 
 
@@ -474,20 +474,24 @@ inline void MatGSO<ZT, FT>::getR(FT& f, int i, int j) {
 
 
 template<class ZT, class FT>
-inline void MatGSO<ZT, FT>::GetSubMuR(double* Mu_t, double* R_t,  int beg, int blocksize){
+inline void MatGSO<ZT, FT>::DumpMu_d(double* Mu, int beg, int blocksize){
   FT e;
   for (int i = beg; i < beg+blocksize; ++i){
     for (int j = beg; j < beg+blocksize; ++j)
     {
       getMu(e,i,j);
-      Mu_t[i*blocksize+j] = e.get_d();
+      Mu[i*blocksize+j] = e.get_d();
     }
-    getR(e,i,i);
-    R_t[i] = e.get_d();
   }
+}
 
-
-
+template<class ZT, class FT>
+inline void MatGSO<ZT, FT>::DumpR_d(double* R, int beg, int blocksize){
+  FT e;
+  for (int i = beg; i < beg+blocksize; ++i){
+      getR(e,i,i);
+      R[i] = e.get_d();
+  }
 }
 
 
