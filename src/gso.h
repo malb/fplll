@@ -476,10 +476,10 @@ inline void MatGSO<ZT, FT>::getR(FT& f, int i, int j) {
 template<class ZT, class FT>
 inline void MatGSO<ZT, FT>::DumpMu_d(double* Mu, int beg, int blocksize){
   FT e;
-  for (int i = beg; i < beg+blocksize; ++i){
-    for (int j = beg; j < beg+blocksize; ++j)
+  for (int i = 0; i < blocksize; ++i){
+    for (int j = 0; j < blocksize; ++j)
     {
-      getMu(e,i,j);
+      getMu(e,i+beg,j+beg);
       Mu[i*blocksize+j] = e.get_d();
     }
   }
@@ -488,8 +488,8 @@ inline void MatGSO<ZT, FT>::DumpMu_d(double* Mu, int beg, int blocksize){
 template<class ZT, class FT>
 inline void MatGSO<ZT, FT>::DumpR_d(double* R, int beg, int blocksize){
   FT e;
-  for (int i = beg; i < beg+blocksize; ++i){
-      getR(e,i,i);
+  for (int i = 0; i < blocksize; ++i){
+      getR(e,i+beg,i+beg);
       R[i] = e.get_d();
   }
 }
